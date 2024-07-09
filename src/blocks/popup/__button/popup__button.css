@@ -19,6 +19,22 @@
   cursor: pointer;
 }
 
+.popup__button-inactive {
+  color: #000;
+  border: 1px solid #000;
+  background: transparent;
+  opacity: 20%;
+}
+
+.popup__button-inactive:hover {
+  background: transparent;
+  cursor: default;
+}
+
+.popup_type_delete .popup__button {
+  margin-top: 38px;
+}
+
 @media screen and (max-width: 568px) {
   .popup__button {
     font-size: 14px;

@@ -11,8 +11,7 @@
   "license": "ISC",
   "keywords": [],
   "dependencies": {
-    "core-js": "^3.37.1",
-    "jquery": "^3.7.1"
+    "core-js": "^3.37.1"
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",

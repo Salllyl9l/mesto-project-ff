@@ -1,47 +1,38 @@
-'use strict'
+'use strict';
 
-import { initialCards } from './cards.js'
-import { handleLikeClick, createCard, handleRemoveClick } from './card.js'
-import { openModal, closeModal, closeModalOnOverlay } from './modal.js'
+import { initialCards } from './cards.js';
+import { handleLikeClick, createCard, handleRemoveClick } from './card.js';
+import { openModal, closeModal, closeModalOnOverlay } from './modal.js';
 
-import '../pages/index.css'
+import '../pages/index.css';
 
-const popupTypeEdit = document.querySelector('.popup_type_edit')
-const popupTypeNewCard = document.querySelector('.popup_type_new-card')
+// Объявляем модальное окно и его элементы в глобальной области
+const popupTypeEdit = document.querySelector('.popup_type_edit');
+const popupTypeNewCard = document.querySelector('.popup_type_new-card');
+const popupTypeImage = document.querySelector('.popup_type_image');
+const popupImageElement = popupTypeImage.querySelector('.popup__image');
+const popupCaptionElement = popupTypeImage.querySelector('.popup__caption');
 
-const editBtn = document.querySelector('.profile__edit-button')
-const addBtn = document.querySelector('.profile__add-button')
+const editBtn = document.querySelector('.profile__edit-button');
+const addBtn = document.querySelector('.profile__add-button');
 
-const editForm = document.forms['edit-profile']
-const newPlaceForm = document.forms['new-place']
+const editForm = document.forms['edit-profile'];
+const newPlaceForm = document.forms['new-place'];
 
-const profileTitle = document.querySelector('.profile__title')
-const profileDescription = document.querySelector('.profile__description')
+const profileTitle = document.querySelector('.profile__title');
+const profileDescription = document.querySelector('.profile__description');
 
-const placesList = document.querySelector('.places__list')
-
-function handleCardClick(item) {
-    const popupImage = document.querySelector('.popup_type_image')
-    const popupImageElement = popupImage.querySelector('.popup__image')
-    const popupCaptionElement = popupImage.querySelector('.popup__caption')
-
-    popupImageElement.src = item.link
-    popupImageElement.alt = item.name
-    popupCaptionElement.textContent = item.name
-
-    openModal(popupImage)
-}
-
+const placesList = document.querySelector('.places__list');
 
 editBtn.addEventListener('click', () => {
-    openModal(popupTypeEdit)
-    editForm.name.value = profileTitle.textContent
-    editForm.description.value = profileDescription.textContent
-})
+  openModal(popupTypeEdit);
+  editForm.name.value = profileTitle.textContent;
+  editForm.description.value = profileDescription.textContent;
+});
 
 addBtn.addEventListener('click', () => {
-    openModal(popupTypeNewCard)
-})
+  openModal(popupTypeNewCard);
+});
 
 function updateProfileInfo({ name, description }) {
   profileTitle.textContent = name;
@@ -56,40 +47,61 @@ editForm.addEventListener('submit', (evt) => {
 });
 
 newPlaceForm.addEventListener('submit', (evt) => {
-    evt.preventDefault()
+  evt.preventDefault();
 
-    const newCard = createCard(
-        {
-            name: newPlaceForm.elements['place-name'].value,
-            link: newPlaceForm.elements.link.value,
-        },
-        handleCardClick,
-        handleLikeClick
-    )
-    placesList.prepend(newCard)
+  const newCard = createCard(
+    {
+      name: newPlaceForm.elements['place-name'].value,
+      link: newPlaceForm.elements.link.value,
+    },
+    (item) => {
+      popupImageElement.src = item.link;
+      popupImageElement.alt = item.name;
+      popupCaptionElement.textContent = item.name;
+      openModal(popupTypeImage);
+    },
+    handleLikeClick,
+    handleRemoveClick
+  );
+  placesList.prepend(newCard);
 
-    closeModal(popupTypeNewCard)
-    newPlaceForm.reset()
-})
+  closeModal(popupTypeNewCard);
+  newPlaceForm.reset();
+});
 
 initialCards.forEach((item) => {
-    const newCard = createCard(item, handleCardClick, handleLikeClick)
-    placesList.append(newCard)
-})
+  const newCard = createCard(
+    item,
+    (item) => {
+      popupImageElement.src = item.link;
+      popupImageElement.alt = item.name;
+      popupCaptionElement.textContent = item.name;
+      openModal(popupTypeImage);
+    },
+    handleLikeClick,
+    handleRemoveClick
+  );
+  placesList.append(newCard);
+});
 
-// Устанавливаем обработчик для закрытия попапа по клику на оверлей
+// Устanавливаем обработчик для закрытия попапа по клику на оверлей
 document.querySelectorAll('.popup').forEach((popup) => {
-    popup.addEventListener('click', (evt) => {
-        if (evt.target === evt.currentTarget) {
-            closeModalOnOverlay(evt)
-        }
-    })
-})
+  popup.addEventListener('click', (evt) => {
+    if (evt.target === evt.currentTarget) {
+      closeModalOnOverlay(evt);
+    }
+  });
+});
 
 document.addEventListener('click', (evt) => {
-  if(evt.target.classList.contains('popup__close') || evt.target.classList.contains('popup')) {
-      const popup = evt.target.classList.contains('popup') ? evt.target : evt.target.closest('.popup');
-      closeModal(popup);
+  if (
+    evt.target.classList.contains('popup__close') ||
+    evt.target.classList.contains('popup')
+  ) {
+    const popup = evt.target.classList.contains('popup')
+      ? evt.target
+      : evt.target.closest('.popup');
+    closeModal(popup);
   }
 });
 
