@@ -54,12 +54,7 @@ newPlaceForm.addEventListener('submit', (evt) => {
       name: newPlaceForm.elements['place-name'].value,
       link: newPlaceForm.elements.link.value,
     },
-    (item) => {
-      popupImageElement.src = item.link;
-      popupImageElement.alt = item.name;
-      popupCaptionElement.textContent = item.name;
-      openModal(popupTypeImage);
-    },
+    (item) => openImageModal(item),
     handleLikeClick,
     handleRemoveClick
   );
@@ -72,19 +67,21 @@ newPlaceForm.addEventListener('submit', (evt) => {
 initialCards.forEach((item) => {
   const newCard = createCard(
     item,
-    (item) => {
-      popupImageElement.src = item.link;
-      popupImageElement.alt = item.name;
-      popupCaptionElement.textContent = item.name;
-      openModal(popupTypeImage);
-    },
+    (item) => openImageModal(item),
     handleLikeClick,
     handleRemoveClick
   );
   placesList.append(newCard);
 });
 
-// Устanавливаем обработчик для закрытия попапа по клику на оверлей
+function openImageModal(item) {
+  popupImageElement.src = item.link;
+  popupImageElement.alt = item.name;
+  popupCaptionElement.textContent = item.name;
+  openModal(popupTypeImage);
+}
+
+// Устанавливаем обработчик для закрытия попапа по клику на оверлей
 document.querySelectorAll('.popup').forEach((popup) => {
   popup.addEventListener('click', (evt) => {
     if (evt.target === evt.currentTarget) {
@@ -102,11 +99,5 @@ document.addEventListener('click', (evt) => {
       ? evt.target
       : evt.target.closest('.popup');
     closeModal(popup);
-  }
-});
-
-placesList.addEventListener('click', (evt) => {
-  if (evt.target.classList.contains('card__delete-button')) {
-    handleRemoveClick(evt);
   }
 });
