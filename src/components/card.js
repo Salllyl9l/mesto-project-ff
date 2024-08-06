@@ -1,8 +1,6 @@
 import { cardTemplate } from './constants.js';
 import { updateLike } from './api.js';
 
-let cardID;
-
 export function createCard(parameters) {
   // parameters constants
   const initialCard = parameters.card;
@@ -15,7 +13,7 @@ export function createCard(parameters) {
   const cardImage = cardElement.querySelector('.card__image');
   const cardTitle = cardElement.querySelector('.card__title');
   const deleteButton = cardElement.querySelector('.card__delete-button');
-  const likeButton =  cardElement.querySelector('.card__like-button');
+  const likeButton = cardElement.querySelector('.card__like-button');
   const likeCounter = cardElement.querySelector('.card__like-counter');
   // initialCard usage
   cardImage.src = initialCard.link;
@@ -39,18 +37,17 @@ export function createCard(parameters) {
     likeButton.classList.add('card__like-button_is-active');
   };
   likeButton.addEventListener('click', () => {
-    cardID = initialCard._id;
-    likeCallback(likeButton, likeCounter);
+    likeCallback(initialCard._id, likeButton, likeCounter); // Передаем cardID как аргумент
   });
   // return
   return cardElement;
 };
 
-export function likeCard(buttonToBeChanged, counterToBeChanged) {
+export function likeCard(cardID, buttonToBeChanged, counterToBeChanged) { // Принимаем cardID как аргумент
   const method = buttonToBeChanged.classList.contains('card__like-button_is-active')
     ? 'DELETE'
     : 'PUT'
-  updateLike(cardID, method)
+  updateLike(cardID, method) // Используем cardID в updateLike
     .then(updatedCard => {
       buttonToBeChanged.classList.toggle('card__like-button_is-active');
       counterToBeChanged.textContent = updatedCard.likes.length;

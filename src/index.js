@@ -2,12 +2,21 @@ import './pages/index.css';
 import { profileImage, cardsContainer, editButton, addButton, avatarButton, popups, editPopup, newCardPopup, imagePopup, avatarPopup, deletePopup, deletePopupButton, imagePopupImage, imagePopupCaption, editForm, newCardForm, avatarForm, nameInput, descriptionInput, nameOutput, descriptionOutput} from './components/constants.js';
 import { createCard, likeCard } from './components/card.js';
 import { openModal, closeModal } from './components/modal.js';
-import { validationConfig, enableValidation, clearValidation } from './components/validation.js';
+import { enableValidation, clearValidation } from './components/validation.js';
 import { getUserData, getInitialCards, updateUserData, postCard, deleteCard, updateAvatar } from './components/api.js';
 import { renderLoading, handleSubmit} from './components/utils.js';
 
 let userID;
 let cardID, cardDeleteButton;
+
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button-inactive',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__input-error_visible'
+};
 
 function openImage(imageToBeOpened, cardTitle) {
   imagePopupImage.src = imageToBeOpened.src;
